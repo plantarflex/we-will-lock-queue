@@ -1,4 +1,6 @@
-## WE WILL LOCK YOU
+## WE WILL LOCK QUEUE
+
+---
 
 * Communication between remote processes via TCP socket
 * Socket Master maintains...
