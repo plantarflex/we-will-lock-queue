@@ -96,7 +96,7 @@ def func(process_name, lock):
 
 
 def run_process():
-    lock = Lock(remote='remote_process_info')
+    lock = Lock(remote='<REMOTE_PROCESS_INFO>')
     global cnt
     cnt = 0
     p1 = Process(target=func, args=(1, lock))
