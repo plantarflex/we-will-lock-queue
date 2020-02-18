@@ -84,7 +84,7 @@ def run_processes():
 * Probably you would like something like below
 
 ```python
-from we_will_lock_you import Lock
+from we_will_lock_queue import Lock
 from multiprocessing import Process
 
 def func(process_name, lock):
