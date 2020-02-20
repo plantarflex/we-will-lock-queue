@@ -1,0 +1,37 @@
+version: '2.4'
+services:
+  master:
+    command: python master.py
+    build:
+      context: .
+    ports:
+      - 9999
+    volumes:
+        - ./:/usr/src/app
+    env_file:
+        - .env
+
+  slave-1:
+    command: python slave.py
+    build:
+      context: .
+    links:
+      - master
+    volumes:
+        - ./:/usr/src/app
+    env_file:
+        - .env
+
+  slave-2:
+    command: python slave.py
+    build:
+      context: .
+    links:
+      - master
+    volumes:
+        - ./:/usr/src/app
+    env_file:
+        - .env
+
+
+
