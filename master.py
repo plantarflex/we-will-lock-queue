@@ -1,6 +1,7 @@
 import socket
 from threading import Thread
 from queue import Queue
+from config import Config
 
 
 class SocketMaster:
@@ -58,9 +59,13 @@ class SocketMaster:
                     continue
 
 
-
 def run():
-    master = SocketMaster('0.0.0.0', 9999)
+    master = SocketMaster(
+        Config.SOCKET_MASTER_NAME,
+        Config.SOCKET_MASTER_PORT
+        )
+
 
 if __name__ == '__main__':
     run()
+

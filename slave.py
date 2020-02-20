@@ -30,7 +30,7 @@ class SocketSlave:
         print('releasing lock')
         self.sock.sendall(self.RELEASE)
 
-    def run(self):
+    def test(self):
         cnt = 1
         while True:
             self.acquire()
@@ -42,20 +42,7 @@ class SocketSlave:
 
 def test():
     slave = SocketSlave('master', 9999)
-    slave.run()
-
-#def run():
-#    th1 = Thread(target=test, args=('th1',))
-#    th2 = Thread(target=test, args=('th2',))
-#    #th3 = Thread(target=test, args=('th3',))
-#
-#    th1.start()
-#    th2.start()
-#    #th3.start()
-#
-#    th1.join()
-#    th2.join()
-#    #th3.join()
+    slave.test()
 
 
 if __name__ == '__main__':

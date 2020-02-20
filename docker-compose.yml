@@ -4,8 +4,8 @@ services:
     command: python master.py
     build:
       context: .
-    ports:
-      - 9999
+    expose:
+      - $SOCKET_MASTER_PORT 
     volumes:
         - ./:/usr/src/app
     env_file:
