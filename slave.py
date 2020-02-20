@@ -30,7 +30,6 @@ class SocketSlave:
         print('releasing lock')
         self.sock.sendall(self.RELEASE)
 
-
     def run(self):
         cnt = 1
         while True:
