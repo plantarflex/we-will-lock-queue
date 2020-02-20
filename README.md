@@ -4,11 +4,13 @@
 * Socket Master maintains...
     * socket server
     * global queue of socket slaves
-    * state object whether to call ACK
-    * broadcaster to call ACK to all slaves
+    * state flag whether to lock
+    * Thread to accept novel client socket
+    * Thread to listen for client socket messages, in round-robin loop context
+    * Thread to send lock in accordance with state flag
 * Socket Slave maintains ...
     * socket client
-    * wait loop for master's acquire-ACK call
+    * wait loop for acquiring/releasing lock and acknowledge to Socket Master 
 * Implemented to mock multiprocessing.Lock
 * (future) may use celery or redis instead of global queue object for more stable operation
 
@@ -18,6 +20,7 @@
 ```python
 from threading import Lock, Thread
 from concurrent.futures import ThreadPoolExecutor
+
 
 def func(thread_name, lock):
     lock.acquire()
@@ -39,6 +42,7 @@ def run_threads():
                 lock
             )
 
+
 def run_accordingly():
     lock = Lock()
     global cnt
@@ -58,6 +62,7 @@ def run_accordingly():
 ```python
 from multiprocessing import Lock
 from concurrent.futures import ProcessPoolExecutor
+
 
 def func(process_name, lock):
     lock.acquire()
@@ -86,6 +91,7 @@ def run_processes():
 ```python
 from we_will_lock_queue import Lock
 from multiprocessing import Process
+
 
 def func(process_name, lock):
     lock.acquire()
