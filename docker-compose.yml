@@ -11,10 +11,15 @@ services:
     env_file:
         - .env
 
+  slave:
+    command: "true"
+    image: we-will-lock-queue_master:latest
+    depends_on:
+      - master
+
   slave-1:
     command: python slave.py
-    build:
-      context: .
+    image: we-will-lock-queue_slave:latest
     links:
       - master
     volumes:
@@ -24,8 +29,17 @@ services:
 
   slave-2:
     command: python slave.py
-    build:
-      context: .
+    image: we-will-lock-queue_slave:latest
+    links:
+      - master
+    volumes:
+        - ./:/usr/src/app
+    env_file:
+        - .env
+
+  slave-3:
+    command: python slave.py
+    image: we-will-lock-queue_slave:latest
     links:
       - master
     volumes:

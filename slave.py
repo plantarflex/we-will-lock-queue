@@ -5,6 +5,7 @@ from threading import Thread
 class SocketSlave:
     ACQUIRE = b'0'
     RELEASE = b'1'
+    LOCK = b'2'
     def __init__(self, host, port):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         while True:
@@ -20,8 +21,8 @@ class SocketSlave:
         self.sock.sendall(self.ACQUIRE)
         while True:
             print('Waiting for lock')
-            data = self.sock.recv(1024)
-            if data == b'lock':
+            data = self.sock.recv(1)
+            if data == self.LOCK:
                 print('acquired lock')
                 return True
 

@@ -3,55 +3,10 @@ from threading import Thread
 from queue import Queue
 
 
-class SocketMaster2:
-    def __init__(self, host, port):
-        self.acq = Queue()
-        self.client_socks = []
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.bind((host, port))
-        self.sock.listen()
-        Thread(target=self.listen, args=()).start()
-        Thread(target=self.handle_clients, args=()).start()
-
-    def listen(self):
-        while True:
-            print('>>>> Waiting for client socket call...')
-            client_sock, addr = self.sock.accept()
-            print('>>>> Established socket connection with {}'.format(addr))
-            self.client_socks.append(client_sock)
-
-    def handle_clients(self):
-        while True:
-            try:
-                for client_sock in self.client_socks:
-                    data = client_sock.recv(1024)
-                    if data == b'acquire':
-                        if self.acq.empty():
-                            print('>>>> {} acquires lock'.format(client_sock))
-                            client_sock.sendall(b'lock')
-                        else:
-                            acq.put(client_sock)
-                        continue
-                    elif data == b'release':
-                        print('>>>> {} releases lock'.format(client_sock))
-                        if self.acq.empty():
-                           pass
-                        else:
-                            next_client_sock = acq.get()
-                            print('>>>> {} acquires lock'.format(next_client_sock))
-                            next_client_sock.sendall(b'lock')
-                            acq.task_done()
-                        continue
-                    else:
-                        continue
-            except Exception as e:
-                print(e)
-                continue
-
-
 class SocketMaster:
     ACQUIRE = b'0'
     RELEASE = b'1'
+    LOCK = b'2'
     def __init__(self, host, port):
         self.acq = Queue()
         self.client_socks = []
@@ -94,7 +49,7 @@ class SocketMaster:
             if self.flag is True and not self.acq.empty():
                 try:
                     client_sock = self.acq.get()
-                    client_sock.sendall(b'lock')
+                    client_sock.sendall(self.LOCK)
                     print('>>>> {} acquires lock'.format(client_sock))
                     self.flag = False
                     self.acq.task_done()
